@@ -12,17 +12,16 @@ public:
     ChessBoard();
     ChessBoard(const ChessBoard&);
     ChessPiece* GetPiece(int, int) const;
-    ChessBoard* DoMove(ChessPiece*, const ChessMove&);
-    void Draw();
+    ChessBoard* DoMove(const ChessMove&);
     void InitializeBoard();
     bool UnderAttack(ChessColor, int, int) const;
     bool InCheck(ChessColor) const;
-    bool NoValidMoves(ChessColor) const;
-    void MovePiece(ChessPiece*, int, int);
+    bool NoValidMoves(ChessColor);
 private:
+    void MovePiece(ChessPiece*, int, int);
+    void ClearCell(int, int);
     std::array<std::array<ChessPiece*, 8>, 8> chessBoard;
     ChessMove* GetKingPosition(ChessColor) const;
-    void ClearCell(int, int);
 };
 
 #endif // CHESSBOARD_H

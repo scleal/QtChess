@@ -30,10 +30,10 @@ bool ChessMove::IsValidMove(const ChessBoard& board) const{
     return false;
 }
 
-bool ChessMove::PutsInCheck(const ChessBoard& board, ChessPiece* piece) const{
+bool ChessMove::PutsInCheck(const ChessBoard& board) const{
     ChessBoard boardCopy(board);
-    ChessPiece pieceCopy(*piece);
-    return (boardCopy.DoMove(&pieceCopy, *this))->InCheck(piece->GetColor());
+    ChessPiece* pieceCopy(board.GetPiece(startX,startY));
+    return (boardCopy.DoMove(*this))->InCheck(pieceCopy->GetColor());
 }
 
 bool ChessMove::IsValidCastleMove(const ChessBoard& board) const{

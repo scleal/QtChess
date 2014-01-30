@@ -7,7 +7,7 @@ class ChessBoard;
 class ChessMove{
 public:
     ChessMove(const int, const int, const int, const int);
-    bool PutsInCheck(const ChessBoard&, ChessPiece*) const;
+    bool PutsInCheck(const ChessBoard&) const;
     bool IsValidMove(const ChessBoard&) const;
     bool IsValidEnPassantMove(const ChessBoard&, int, int) const;
     bool IsValidCastleMove(const ChessBoard&) const;
