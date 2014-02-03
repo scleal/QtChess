@@ -2,13 +2,33 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(ChessBoard& board) :
-    board(board)
-{
+    board(board){
     startPiece = NULL;
     startX = 0;
     startY = 0;
     currentPlayer = WHITE;
     promotion = false;
+    setFixedSize(480, 480);
+    InitializeLayout();
+}
+
+void MainWindow::InitializeLayout(){
+    promotions = new QWidget(this);
+    promotions->move(70,220);
+    mapper = new QSignalMapper(promotions);
+    layout = new QHBoxLayout(promotions);
+    buttons[QUEEN] = new QPushButton("Queen");
+    buttons[ROOK] = new QPushButton("Rook");
+    buttons[BISHOP] = new QPushButton("Bishop");
+    buttons[KNIGHT] = new QPushButton("Knight");
+    QObject::connect(mapper, SIGNAL(mapped(int)), this, SLOT(Promote(int)));
+    for (int i = 0; i < 4; i++){
+        layout->addWidget(buttons[i]);
+        QObject::connect(buttons[i], SIGNAL(pressed()), mapper, SLOT(map()));
+        mapper->setMapping(buttons[i], i);
+    }
+    promotions->setLayout(layout);
+    promotions->hide();
 }
 
 void MainWindow::paintEvent(QPaintEvent* event){
@@ -39,6 +59,7 @@ void MainWindow::DrawStatus(QPainter& painter){
     bool noValidMoves = board.NoValidMoves(currentPlayer);
     bool inCheck = board.InCheck(currentPlayer);
     QPen pen(Qt::red);
+    painter.setPen(pen);
     QString curPlayer = currentPlayer == WHITE ? "WHITE" : "BLACK";
     if (noValidMoves && inCheck){
         painter.drawText(200, 200, curPlayer.append(" IN CHECKMATE"));
@@ -49,10 +70,7 @@ void MainWindow::DrawStatus(QPainter& painter){
     } else if (inCheck){
         painter.drawText(200, 200, curPlayer.append(" IN CHECK"));
     } else if (promotion){
-        painter.drawText(200, 200, "Queen  (Q)");
-        painter.drawText(200, 220, "Rook   (R)");
-        painter.drawText(200, 240, "Bishop (B)");
-        painter.drawText(200, 260, "Knight (K)");
+        promotions->show();
     }
 }
 
@@ -87,26 +105,13 @@ void MainWindow::mousePressEvent(QMouseEvent* event){
     repaint();
 }
 
-void MainWindow::keyPressEvent(QKeyEvent* event){
-    if (promotion){
-        int key = event->key();
-        if (key==Qt::Key_Q){
-            startPiece->SetRank(QUEEN);
-            promotion = false;
-        } else if (key==Qt::Key_R){
-            startPiece->SetRank(ROOK);
-            promotion = false;
-        } else if (key==Qt::Key_B){
-            startPiece->SetRank(BISHOP);
-            promotion = false;
-        } else if (key==Qt::Key_K){
-            startPiece->SetRank(KNIGHT);
-            promotion = false;
-        }
-        if (!promotion){
-            SwitchTurns();
-            repaint();
-        }
+void MainWindow::Promote(int rank){
+    if (startPiece){
+        promotions->hide();
+        startPiece->SetRank(static_cast<ChessRank>(rank));
+        promotion = false;
+        SwitchTurns();
+        repaint();
     }
 }
 

@@ -1,18 +1,18 @@
 #include "chesspiece.h"
 
 const std::array<const char* const, 12> ChessPiece::fileNames = {
-    ":/pieces/white_pawn.png",
-    ":/pieces/white_rook.png",
-    ":/pieces/white_knight.png",
-    ":/pieces/white_bishop.png",
     ":/pieces/white_queen.png",
+    ":/pieces/white_rook.png",
+    ":/pieces/white_bishop.png",
+    ":/pieces/white_knight.png",
     ":/pieces/white_king.png",
-    ":/pieces/black_pawn.png",
-    ":/pieces/black_rook.png",
-    ":/pieces/black_knight.png",
-    ":/pieces/black_bishop.png",
+    ":/pieces/white_pawn.png",
     ":/pieces/black_queen.png",
-    ":/pieces/black_king.png"
+    ":/pieces/black_rook.png",
+    ":/pieces/black_bishop.png",
+    ":/pieces/black_knight.png",
+    ":/pieces/black_king.png",
+    ":/pieces/black_pawn.png"
 };
 
 ChessPiece::ChessPiece(ChessRank rank, ChessColor color) :

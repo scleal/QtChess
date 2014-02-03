@@ -3,6 +3,9 @@
 
 #include <QtGui>
 #include <QWidget>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QSignalMapper>
 
 #include "chessboard.h"
 class ChessBoard;
@@ -11,16 +14,18 @@ class MainWindow : public QWidget{
     Q_OBJECT
 public:
     MainWindow(ChessBoard&);
+public slots:
+    void Promote(int);
 protected:
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
-    void keyPressEvent(QKeyEvent*);
     void DrawBoard(QPainter&);
     void DrawPossibleMoves(QPainter&);
     void DrawStatus(QPainter&);
     bool IsValidSelection(ChessPiece*);
     void MakeSelection(int, int);
     void SwitchTurns();
+    void InitializeLayout();
 private:
     ChessBoard& board;
     ChessColor currentPlayer;
@@ -28,6 +33,10 @@ private:
     int startX, startY;
     bool promotion;
     const int CELL_SIZE = 60;
+    QWidget* promotions;
+    QHBoxLayout* layout;
+    QSignalMapper* mapper;
+    std::array<QPushButton*, 4> buttons;
 };
 
 #endif // MAINWINDOW_H

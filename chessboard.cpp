@@ -17,8 +17,7 @@ ChessBoard::ChessBoard(const ChessBoard& rhs){
     }
 }
 
-ChessPiece* ChessBoard::GetPiece(int x, int y) const
-{
+ChessPiece* ChessBoard::GetPiece(int x, int y) const{
     if (x < 0 || x > 7 || y < 0 || y > 7)
         return NULL;
     return chessBoard[x][y];
