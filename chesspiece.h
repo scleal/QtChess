@@ -16,8 +16,6 @@ public:
     inline int GetMoveCount() const { return moveCount; }
     inline void IncrementMoveCount() { moveCount++; }
     inline void DecrementMoveCount() { moveCount--; }
-    inline int GetDelta() const { return color==WHITE ? -1 : 1; }
-    inline int GetStartingRow() const { return color==WHITE ? 6 : 1; }
     QImage* GetImage() const;
 
 private:

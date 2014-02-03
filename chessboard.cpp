@@ -77,6 +77,7 @@ inline void ChessBoard::ClearCell(int x, int y){
 ChessBoard* ChessBoard::DoMove(const ChessMove& move){
     ChessPiece* piece = GetPiece(move.startX, move.startY);
     ChessRank rank = piece->GetRank();
+    ChessColor color = piece->GetColor();
     if (rank==KING && move.IsValidCastleMove(*this)){
         int x = 7;
         int deltaX = 1;
@@ -86,7 +87,7 @@ ChessBoard* ChessBoard::DoMove(const ChessMove& move){
         }
         MovePiece(GetPiece(x, move.startY), move.startX+deltaX, move.startY);
         ClearCell(x, move.startY);
-    } else if (rank == PAWN && move.IsValidEnPassantMove(*this, piece->GetDelta(), piece->GetStartingRow())){
+    } else if (rank == PAWN && move.IsValidEnPassantMove(*this, GetDelta(color), GetStartingRow(color))){
         ClearCell(move.endX, move.startY);
     }
     piece->IncrementMoveCount();

@@ -5,17 +5,17 @@ ChessMove::ChessMove(const int startX, const int startY, const int endX, const i
     startX(startX),
     startY(startY),
     endX(endX),
-    endY(endY)
-{}
+    endY(endY) {}
 
 bool ChessMove::IsValidMove(const ChessBoard& board) const{
     ChessPiece* startPiece = board.GetPiece(startX, startY);
     ChessPiece* occupyingPiece = board.GetPiece(endX, endY);
-    if (occupyingPiece && occupyingPiece->GetColor() == startPiece->GetColor())
+    ChessColor color = startPiece->GetColor();
+    if (occupyingPiece && occupyingPiece->GetColor() == color)
         return false;
     switch (startPiece->GetRank()){
     case PAWN:
-        return IsValidMovePawn(board) || IsValidEnPassantMove(board, startPiece->GetDelta(), startPiece->GetStartingRow());
+        return IsValidMovePawn(board) || IsValidEnPassantMove(board, GetDelta(color), GetStartingRow(color));
     case ROOK:
         return IsValidMoveRook(board);
     case KNIGHT:
@@ -68,8 +68,10 @@ bool ChessMove::GetCondition(int i, int start, int end){
 }
 
 bool ChessMove::IsValidMovePawn(const ChessBoard& board) const{
-    int delta = board.GetPiece(startX, startY)->GetDelta();
-    int startingRow = board.GetPiece(startX, startY)->GetStartingRow();
+    ChessPiece* pawn = board.GetPiece(startX, startY);
+    ChessColor color = pawn->GetColor();
+    int delta = GetDelta(color);
+    int startingRow = GetStartingRow(color);
     ChessPiece* occupyingPiece = board.GetPiece(endX, endY);
     if (occupyingPiece){
         return abs(startX-endX)==1 && startY+delta==endY;
