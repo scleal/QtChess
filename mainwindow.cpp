@@ -8,6 +8,7 @@ MainWindow::MainWindow(ChessBoard& board) :
     startY = 0;
     currentPlayer = WHITE;
     promotion = false;
+    gameOver = false;
     setFixedSize(480, 480);
     InitializeLayout();
 }
@@ -61,12 +62,15 @@ void MainWindow::DrawStatus(QPainter& painter){
     QPen pen(Qt::red);
     painter.setPen(pen);
     QString curPlayer = currentPlayer == WHITE ? "WHITE" : "BLACK";
-    if (noValidMoves && inCheck){
-        painter.drawText(200, 200, curPlayer.append(" IN CHECKMATE"));
-        QString winner = currentPlayer == WHITE ? "BLACK" : "WHITE";
-        painter.drawText(200, 220, winner.append(" WINS"));
-    } else if (noValidMoves){
-        painter.drawText(200, 200, "STALEMATE");
+    if (noValidMoves){
+        gameOver = true;
+        if (inCheck){
+            painter.drawText(200, 200, curPlayer.append(" IN CHECKMATE"));
+            QString winner = currentPlayer == WHITE ? "BLACK" : "WHITE";
+            painter.drawText(200, 220, winner.append(" WINS"));
+        } else {
+            painter.drawText(200, 200, "STALEMATE");
+        }
     } else if (inCheck){
         painter.drawText(200, 200, curPlayer.append(" IN CHECK"));
     } else if (promotion){
@@ -121,7 +125,7 @@ void MainWindow::SwitchTurns(){
 }
 
 bool MainWindow::IsValidSelection(ChessPiece* piece){
-    return piece && piece->GetColor()==currentPlayer;
+    return !gameOver && piece && piece->GetColor()==currentPlayer;
 }
 
 void MainWindow::MakeSelection(int x, int y){

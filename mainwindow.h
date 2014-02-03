@@ -31,7 +31,7 @@ private:
     ChessColor currentPlayer;
     ChessPiece* startPiece;
     int startX, startY;
-    bool promotion;
+    bool promotion, gameOver;
     const int CELL_SIZE = 60;
     QWidget* promotions;
     QHBoxLayout* layout;
