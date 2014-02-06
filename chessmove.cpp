@@ -49,7 +49,7 @@ bool ChessMove::IsValidCastleMove(const ChessBoard& board) const{
     ChessPiece* rook = board.GetPiece(x, startY);
     if (rook && rook->GetMoveCount() != 0) return false;
     ChessColor opposingColor = SwitchColor(king->GetColor());
-    for (int i = startX; GetCondition(i, startX, endX); i += delta){
+    for (int i = startX; GetCondition(i, startX, x); i += delta){
         if ((board.GetPiece(i, startY) && i != startX)
           || board.UnderAttack(opposingColor,i,startY)) return false;
     }

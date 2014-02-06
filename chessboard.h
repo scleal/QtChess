@@ -11,6 +11,7 @@ class ChessBoard{
 public:
     ChessBoard();
     ChessBoard(const ChessBoard&);
+    ~ChessBoard();
     ChessPiece* GetPiece(int, int) const;
     ChessBoard* DoMove(const ChessMove&);
     void InitializeBoard();

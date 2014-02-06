@@ -17,6 +17,15 @@ ChessBoard::ChessBoard(const ChessBoard& rhs){
     }
 }
 
+ChessBoard::~ChessBoard(){
+    for (int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            ChessPiece* piece = GetPiece(i,j);
+            delete piece;
+        }
+    }
+}
+
 ChessPiece* ChessBoard::GetPiece(int x, int y) const{
     if (x < 0 || x > 7 || y < 0 || y > 7)
         return NULL;
@@ -88,9 +97,13 @@ ChessBoard* ChessBoard::DoMove(const ChessMove& move){
         MovePiece(GetPiece(x, move.startY), move.startX+deltaX, move.startY);
         ClearCell(x, move.startY);
     } else if (rank == PAWN && move.IsValidEnPassantMove(*this, GetDelta(color), GetStartingRow(color))){
+        ChessPiece* occupyingPiece = GetPiece(move.endX, move.startY);
+        delete occupyingPiece;
         ClearCell(move.endX, move.startY);
     }
     piece->IncrementMoveCount();
+    ChessPiece* occupyingPiece = GetPiece(move.endX, move.endY);
+    delete occupyingPiece;
     MovePiece(piece, move.endX, move.endY);
     ClearCell(move.startX, move.startY);
     return this;

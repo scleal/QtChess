@@ -19,16 +19,20 @@ ChessPiece::ChessPiece(ChessRank rank, ChessColor color) :
     rank(rank),
     color(color),
     moveCount(0),
-    image(new QImage(fileNames[rank+color])){}
+    image(new QImage(fileNames[rank+color])) {}
 
 ChessPiece::ChessPiece(const ChessPiece& rhs) :
     rank(rhs.rank),
     color(rhs.color),
     moveCount(rhs.moveCount),
-    image(NULL){}
+    image(NULL) {}
 
 QImage* ChessPiece::GetImage() const{
     return image;
+}
+
+ChessPiece::~ChessPiece(){
+    delete image;
 }
 
 void ChessPiece::SetRank(ChessRank newRank){

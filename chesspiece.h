@@ -10,6 +10,7 @@ class ChessPiece{
 public:
     ChessPiece(ChessRank, ChessColor);
     ChessPiece(const ChessPiece&);
+    ~ChessPiece();
     inline ChessColor GetColor() const { return color; }
     inline ChessRank GetRank() const { return rank; }
     void SetRank(ChessRank);
