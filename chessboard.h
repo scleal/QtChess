@@ -19,7 +19,7 @@ public:
     bool UnderAttack(ChessColor, int, int) const;
     bool InCheck(ChessColor) const;
     bool NoValidMoves(ChessColor);
-    std::vector<ChessMove*> GetPsuedoLegalMoves();
+    std::vector<ChessMove*>& GetPsuedoLegalMoves();
     void GeneratePsuedoLegalMoves(int, int);
 private:
     void MovePiece(ChessPiece*, int, int);

@@ -146,7 +146,7 @@ bool ChessBoard::NoValidMoves(ChessColor currentPlayer){
     return true;
 }
 
-std::vector<ChessMove*> ChessBoard::GetPsuedoLegalMoves(){
+std::vector<ChessMove*>& ChessBoard::GetPsuedoLegalMoves(){
     return psuedoLegalMoves;
 }
 
