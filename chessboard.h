@@ -19,13 +19,14 @@ public:
     bool UnderAttack(ChessColor, int, int) const;
     bool InCheck(ChessColor) const;
     bool NoValidMoves(ChessColor);
+    std::vector<ChessMove*> GetPsuedoLegalMoves();
+    void GeneratePsuedoLegalMoves(int, int);
 private:
     void MovePiece(ChessPiece*, int, int);
     void ClearCell(int, int);
     std::array<std::array<ChessPiece*, 8>, 8> chessBoard;
     ChessMove* GetKingPosition(ChessColor) const;
     std::vector<ChessMove*> psuedoLegalMoves;
-    void GeneratePsuedoLegalMoves(int, int);
     void GeneratePLPawnMoves(int, int);
     void GeneratePLRookMoves(int, int);
     void GeneratePLKnightMoves(int, int);

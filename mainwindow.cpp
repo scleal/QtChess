@@ -79,14 +79,14 @@ void MainWindow::DrawStatus(QPainter& painter){
 }
 
 void MainWindow::DrawPossibleMoves(QPainter& painter){
-    for (int i = 0; i < 8; i++){
-        for (int j = 0; j < 8; j++){
-            ChessMove move(startX, startY, i, j);
-            if (move.IsValidMove(board) && !move.PutsInCheck(board)){
-                QPen pen(Qt::blue);
-                painter.setPen(pen);
-                painter.drawRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE);
-            }
+    QPen pen(Qt::blue);
+    painter.setPen(pen);
+    board.GeneratePsuedoLegalMoves(startX, startY);
+    std::vector<ChessMove*> moves = board.GetPsuedoLegalMoves();
+    for (std::vector<ChessMove*>::iterator it = moves.begin(); it != moves.end(); it++){
+        ChessMove* move = *it;
+        if (move->IsValidMove(board) && !move->PutsInCheck(board)){
+            painter.drawRect(move->endX*CELL_SIZE, move->endY*CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
     }
 }

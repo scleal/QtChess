@@ -134,9 +134,6 @@ bool ChessBoard::NoValidMoves(ChessColor currentPlayer){
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             if (GetPiece(i, j) && GetPiece(i, j)->GetColor()==currentPlayer){
-                //clear psuedo-legal moves vector
-                psuedoLegalMoves.clear();
-                //fill psuedo-legal moves vector
                 GeneratePsuedoLegalMoves(i,j);
                 //check if psuedo legal moves are actually legal
                 for (std::vector<ChessMove*>::iterator it = psuedoLegalMoves.begin(); it != psuedoLegalMoves.end(); it++){
@@ -149,7 +146,12 @@ bool ChessBoard::NoValidMoves(ChessColor currentPlayer){
     return true;
 }
 
+std::vector<ChessMove*> ChessBoard::GetPsuedoLegalMoves(){
+    return psuedoLegalMoves;
+}
+
 void ChessBoard::GeneratePsuedoLegalMoves(int x, int y){
+    psuedoLegalMoves.clear();
     switch (GetPiece(x,y)->GetRank()){
     case PAWN:
         return GeneratePLPawnMoves(x,y);
