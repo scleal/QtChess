@@ -47,10 +47,10 @@ void MainWindow::paintEvent(QPaintEvent* event){
 void MainWindow::DrawBoard(QPainter& painter){
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
-            if (i%2==j%2) painter.fillRect(i*60, j*60, 60, 60, Qt::white);
-            else  painter.fillRect(i*60, j*60, 60, 60, Qt::gray);
+            if (i%2==j%2) painter.fillRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE, Qt::white);
+            else  painter.fillRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE, Qt::gray);
             if (board.GetPiece(i,j)){
-                painter.drawImage(i*60, j*60, *(board.GetPiece(i,j)->GetImage()));
+                painter.drawImage(i*CELL_SIZE, j*CELL_SIZE, *(board.GetPiece(i,j)->GetImage()));
             }
         }
     }
@@ -85,7 +85,7 @@ void MainWindow::DrawPossibleMoves(QPainter& painter){
             if (move.IsValidMove(board) && !move.PutsInCheck(board)){
                 QPen pen(Qt::blue);
                 painter.setPen(pen);
-                painter.drawRect(i*60, j*60, 60, 60);
+                painter.drawRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE);
             }
         }
     }
@@ -93,8 +93,8 @@ void MainWindow::DrawPossibleMoves(QPainter& painter){
 
 void MainWindow::mousePressEvent(QMouseEvent* event){
     if (!promotion){
-        int x = (event->x())/60;
-        int y = (event->y())/60;
+        int x = (event->x())/CELL_SIZE;
+        int y = (event->y())/CELL_SIZE;
         ChessMove move(startX, startY, x, y);
         if (IsValidSelection(startPiece) && move.IsValidMove(board) && !move.PutsInCheck(board)){
             board.DoMove(move);

@@ -2,6 +2,7 @@
 #define CHESSBOARD_H
 
 #include <array>
+#include <vector>
 #include "chesspiece.h"
 #include "chessmove.h"
 class ChessPiece;
@@ -23,6 +24,14 @@ private:
     void ClearCell(int, int);
     std::array<std::array<ChessPiece*, 8>, 8> chessBoard;
     ChessMove* GetKingPosition(ChessColor) const;
+    std::vector<ChessMove*> psuedoLegalMoves;
+    void GeneratePsuedoLegalMoves(int, int);
+    void GeneratePLPawnMoves(int, int);
+    void GeneratePLRookMoves(int, int);
+    void GeneratePLKnightMoves(int, int);
+    void GeneratePLKingMoves(int, int);
+    void GeneratePLQueenMoves(int, int);
+    void GeneratePLBishopMoves(int, int);
 };
 
 #endif // CHESSBOARD_H

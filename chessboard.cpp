@@ -133,16 +133,93 @@ bool ChessBoard::InCheck(ChessColor currentPlayer) const{
 bool ChessBoard::NoValidMoves(ChessColor currentPlayer){
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
-            if (GetPiece(i,j) && GetPiece(i, j)->GetColor()==currentPlayer){
-                for (int k = 0; k < 8; k++){
-                    for (int l = 0; l < 8; l++){
-                        ChessMove move(i,j,k,l);
-                        if (move.IsValidMove(*this) && !move.PutsInCheck(*this))
-                            return false;
-                    }
+            if (GetPiece(i, j) && GetPiece(i, j)->GetColor()==currentPlayer){
+                //clear psuedo-legal moves vector
+                psuedoLegalMoves.clear();
+                //fill psuedo-legal moves vector
+                GeneratePsuedoLegalMoves(i,j);
+                //check if psuedo legal moves are actually legal
+                for (std::vector<ChessMove*>::iterator it = psuedoLegalMoves.begin(); it != psuedoLegalMoves.end(); it++){
+                    if ((*it)->IsValidMove(*this) && !(*it)->PutsInCheck(*this))
+                        return false;
                 }
             }
         }
     }
     return true;
+}
+
+void ChessBoard::GeneratePsuedoLegalMoves(int x, int y){
+    switch (GetPiece(x,y)->GetRank()){
+    case PAWN:
+        return GeneratePLPawnMoves(x,y);
+    case ROOK:
+        return GeneratePLRookMoves(x,y);
+    case KNIGHT:
+        return GeneratePLKnightMoves(x,y);
+    case BISHOP:
+        return GeneratePLBishopMoves(x,y);
+    case QUEEN:
+        return GeneratePLQueenMoves(x,y);
+    case KING:
+        return GeneratePLKingMoves(x,y);
+    }
+}
+
+void ChessBoard::GeneratePLPawnMoves(int startX, int startY){
+    int delta = GetDelta(GetPiece(startX, startY)->GetColor());
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX-1, startY+delta));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX, startY+delta));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX, startY+2*delta));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX+1, startY+delta));
+}
+
+void ChessBoard::GeneratePLRookMoves(int startX, int startY){
+    for (int i = 0; i < 8; i++){
+        if (i!=startY)
+            psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX, i));
+        if (i!=startX)
+            psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY));
+    }
+}
+
+void ChessBoard::GeneratePLKnightMoves(int startX, int startY){
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX+1, startY+2));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX+1, startY-2));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX+2, startY+1));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX+2, startY-1));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX-1, startY+2));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX-1, startY-2));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX-2, startY+1));
+    psuedoLegalMoves.push_back(new ChessMove(startX, startY, startX-2, startY-1));
+}
+
+void ChessBoard::GeneratePLBishopMoves(int startX, int startY){
+    int i, j;
+    for (i = startX+1, j = startY+1; i < 8 && j < 8; i++, j++)
+        psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, j));
+    for (i = startX+1, j = startY-1; i < 8 && j >= 0; i++, j--)
+        psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, j));
+    for (i = startX-1, j = startY+1; i >= 0 && j < 8; i--, j++)
+        psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, j));
+    for (i = startX-1, j = startY-1; i >= 0 && j >= 0; i--, j--)
+        psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, j));
+}
+
+void ChessBoard::GeneratePLQueenMoves(int startX, int startY){
+    GeneratePLRookMoves(startX, startY);
+    GeneratePLBishopMoves(startX, startY);
+}
+
+void ChessBoard::GeneratePLKingMoves(int startX, int startY){
+    //current row
+    for (int i = startX-2; i <= startX+2; i++)
+        if (i!=startX)
+            psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY));
+    for (int i = startX-1; i <= startX+1; i++){
+        //below row
+        psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY+1));
+        //above row
+        psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY-1));
+    }
 }
