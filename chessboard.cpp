@@ -8,11 +8,8 @@ ChessBoard::ChessBoard(){
 ChessBoard::ChessBoard(const ChessBoard& rhs){
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
-            if (ChessPiece* piece = rhs.GetPiece(i,j)){
-                chessBoard[i][j] = new ChessPiece(*piece);
-            } else {
-                chessBoard[i][j] = NULL;
-            }
+            ChessPiece* piece = rhs.GetPiece(i,j);
+            chessBoard[i][j] = piece ? new ChessPiece(*piece) : NULL;
         }
     }
 }
@@ -219,9 +216,7 @@ void ChessBoard::GeneratePLKingMoves(int startX, int startY){
         if (i!=startX)
             psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY));
     for (int i = startX-1; i <= startX+1; i++){
-        //below row
         psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY+1));
-        //above row
         psuedoLegalMoves.push_back(new ChessMove(startX, startY, i, startY-1));
     }
 }

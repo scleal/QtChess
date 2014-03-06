@@ -47,11 +47,9 @@ void MainWindow::paintEvent(QPaintEvent* event){
 void MainWindow::DrawBoard(QPainter& painter){
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
-            if (i%2==j%2) painter.fillRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE, Qt::white);
-            else  painter.fillRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE, Qt::gray);
-            if (board.GetPiece(i,j)){
+            painter.fillRect(i*CELL_SIZE, j*CELL_SIZE, CELL_SIZE, CELL_SIZE, (i%2==j%2) ? Qt::white : Qt::gray);
+            if (board.GetPiece(i,j))
                 painter.drawImage(i*CELL_SIZE, j*CELL_SIZE, *(board.GetPiece(i,j)->GetImage()));
-            }
         }
     }
 }
