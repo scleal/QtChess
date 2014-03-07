@@ -12,14 +12,13 @@ class ChessBoard{
 public:
     ChessBoard();
     ChessBoard(const ChessBoard&);
-    ~ChessBoard();
     ChessPiece* GetPiece(int, int) const;
     ChessBoard* DoMove(const ChessMove&);
     void InitializeBoard();
     bool UnderAttack(ChessColor, int, int) const;
     bool InCheck(ChessColor) const;
     bool NoValidMoves(ChessColor);
-    std::vector<ChessMove*>& GetPsuedoLegalMoves();
+    const std::vector<ChessMove*>& GetPsuedoLegalMoves() const;
     void GeneratePsuedoLegalMoves(int, int);
 private:
     void MovePiece(ChessPiece*, int, int);

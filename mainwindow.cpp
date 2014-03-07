@@ -82,9 +82,9 @@ void MainWindow::DrawPossibleMoves(QPainter& painter){
     board.GeneratePsuedoLegalMoves(startX, startY);
     std::vector<ChessMove*> moves = board.GetPsuedoLegalMoves();
     for (std::vector<ChessMove*>::iterator it = moves.begin(); it != moves.end(); it++){
-        ChessMove* move = *it;
-        if (move->IsValidMove(board) && !move->PutsInCheck(board)){
-            painter.drawRect(move->endX*CELL_SIZE, move->endY*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        ChessMove move = **it;
+        if (move.IsValidMove(board) && !move.PutsInCheck(board)){
+            painter.drawRect(move.endX*CELL_SIZE, move.endY*CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
     }
 }
